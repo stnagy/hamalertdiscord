@@ -10,7 +10,7 @@ HAMALERT_USERNAME = ENV["HAMALERT_USERNAME"]
 HAMALERT_PASSWORD = ENV["HAMALERT_PASSWORD"]
 
 # Replace with your Discord webhook URL
-DISCORD_WEBHOOK_URL = ENV["DISCORD_WEBHOOK_UR"]
+DISCORD_WEBHOOK_URL = ENV["DISCORD_WEBHOOK_URL"]
 
 def send_discord_webhook(content):
     data = {"content": content}
