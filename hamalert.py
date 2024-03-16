@@ -4,13 +4,14 @@ import time
 import json
 import requests
 import logging
+import os
 
 # Replace with your HamAlert username and password
-HAMALERT_USERNAME = ENV["HAMALERT_USERNAME"]
-HAMALERT_PASSWORD = ENV["HAMALERT_PASSWORD"]
+HAMALERT_USERNAME = os.environ["HAMALERT_USERNAME"]
+HAMALERT_PASSWORD = os.environ["HAMALERT_PASSWORD"]
 
 # Replace with your Discord webhook URL
-DISCORD_WEBHOOK_URL = ENV["DISCORD_WEBHOOK_URL"]
+DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
 
 def send_discord_webhook(content):
     data = {"content": content}
