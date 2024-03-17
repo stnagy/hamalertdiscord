@@ -12,11 +12,18 @@ HAMALERT_PASSWORD = os.environ["HAMALERT_PASSWORD"]
 
 # Replace with your Discord webhook URL
 DISCORD_WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
+DISCORD_FT_WEBHOOK_URL = os.environ["DISCORD_FT_WEBHOOK_URL"]
 
-def send_discord_webhook(content):
+def send_discord_webhook(content, mode):
     data = {"content": content}
     headers = {"Content-Type": "application/json"}
-    response = requests.post(DISCORD_WEBHOOK_URL, json=data, headers=headers)
+    
+    # separate webhook for FT8/FT4
+    if (mode.upper() == "FT8") or (mode.upper() == "FT4"):
+        response = requests.post(DISCORD_FT_WEBHOOK_URL, json=data, headers=headers)
+    else:
+        response = requests.post(DISCORD_WEBHOOK_URL, json=data, headers=headers)
+    
     if response.status_code == 204:
         logging.info("Discord webhook sent successfully.")
     else:
@@ -67,6 +74,7 @@ def telnet_listener(host, port, username, password):
                     # Ensure that the data has enough pieces to extract relevant information
                     if all(key in data_dict for key in required_fields):
                         # Construct the message for Discord webhook
+                        mode = data_dict['mode']
                         message = f"{data_dict['mode'].upper()}: {data_dict['callsign']} on {data_dict['frequency']} MHz at {data_dict['time']} UTC (via {data_dict['spotter']})"
                         sota_fields = {'summitName', 'summitRef', 'summitPoints', 'summitHeight'}
                         if all(key in data_dict for key in sota_fields):
@@ -82,7 +90,7 @@ def telnet_listener(host, port, username, password):
                     message = data
 
                 logging.info(f"sending message to discord: {message}")
-                send_discord_webhook(message)
+                send_discord_webhook(message, mode)
 
     except ConnectionRefusedError:
         logging.error("Telnet connection refused. Make sure the server is running and reachable.")
