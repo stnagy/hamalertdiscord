@@ -67,7 +67,7 @@ def telnet_listener(host, port, username, password):
                     # Ensure that the data has enough pieces to extract relevant information
                     if all(key in data_dict for key in required_fields):
                         # Construct the message for Discord webhook
-                        message = f"SPOT: {data_dict['callsign']} seen by {data_dict['spotter']} on {data_dict['frequency']} MHz ({data_dict['mode']}) at {data_dict['time']} UTC"
+                        message = f"{data_dict['mode'].upper()}: {data_dict['callsign']} on {data_dict['frequency']} MHz at {data_dict['time']} UTC (via {data_dict['spotter']})"
                         sota_fields = {'summitName', 'summitRef', 'summitPoints', 'summitHeight'}
                         if all(key in data_dict for key in sota_fields):
                             message = "SOTA " + message
